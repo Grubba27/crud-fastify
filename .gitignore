@@ -1,0 +1,13 @@
+# Project exclude paths
+/config/db.js
+/customers/customer-context.js
+/customers/customer-controller.js
+/customers/customer-schema.js
+/customers/customer-service.js
+/customers/index.js
+/node_modules/
+/pet/index.js
+/pet/pet-controller.js
+/pet/pet-schema.js
+/pet/pet-service.js
+/index.js

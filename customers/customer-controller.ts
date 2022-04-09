@@ -1,12 +1,14 @@
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import CustomerService from "./customer-service";
 import {CustomerSchema} from "./customer-schema";
+import PetService from "../pet/pet-service";
 
 
 export async function CustomerController(fastify: FastifyInstance) {
 
 
     const customerService = CustomerService(fastify);
+    const petService = PetService(fastify);
 
     fastify.get<{ Reply: Array<CustomerSchema> }>
     ('/customers', async (
@@ -21,7 +23,7 @@ export async function CustomerController(fastify: FastifyInstance) {
     });
 
     fastify.get<{ Params: { customerID: string }, Reply: CustomerSchema }>
-    ('/customers/:userID', async (
+    ('/customers/:customerID', async (
         request: FastifyRequest<{ Params: { customerID: string } }>,
         reply: FastifyReply
     ) => {
@@ -34,8 +36,35 @@ export async function CustomerController(fastify: FastifyInstance) {
         reply.status(200).send(result);
     });
 
+    fastify.get<{ Params: { customerID: string }, Reply: CustomerSchema }>
+    ('/customers/:customerID/pets', async (
+        request: FastifyRequest<{ Params: { customerID: string } }>,
+        reply: FastifyReply
+    ) => {
+        const {customerID} = request.params;
+        const customer = await customerService.getCustomerById(customerID);
+
+        if (!customer) {
+            reply.status(404).send('Invalid user id');
+            throw new Error('Invalid user id');
+        }
+
+        if (customer.pets === undefined || customer.pets?.length === 0 ){
+            reply.status(400).send('No pets were added');
+            throw new Error('No pets were added');
+        }
+
+        const res = await petService.getPetsByIds(customer.pets).toArray();
+
+        if (res === null) {
+            reply.status(500).send('DB broke');
+            throw new Error('Something is wrong');
+        }
+        reply.status(200).send(res);
+    });
+
     fastify.put<{ Body: CustomerSchema, Reply: CustomerSchema, Params: { customerID: string } }>
-    ('/customers/:userID', async (
+    ('/customers/:customerID', async (
         request: FastifyRequest<{ Body: CustomerSchema, Params: { customerID: string } }>,
         reply: FastifyReply
     ) => {

@@ -15,7 +15,7 @@ export default function CustomerService(
     }
 
     const getCustomerById = (id: string) => {
-        return  db.findOne({_id: new ObjectId(id)});
+        return db.findOne({"_id": new ObjectId(id)});
     }
 
     const updateCustomer = (id: string, customer: CustomerSchema) => {

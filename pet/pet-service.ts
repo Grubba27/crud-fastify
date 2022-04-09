@@ -18,6 +18,11 @@ export default function PetService(
         return db.findOne(new ObjectId(id))
     }
 
+    const getPetsByIds = (ids: Array<string>) => {
+        const i  = ids.map($ => new ObjectId($));
+        return db.find( {_id: {$in: i}} );
+    }
+
     const updatePet = (id: string, pet: PetSchema) => {
         return db.findOneAndReplace({_id: new ObjectId(id)}, pet);
     }
@@ -26,5 +31,5 @@ export default function PetService(
         return db.insertOne(pet);
     }
 
-    return {getAllPets, getPetById, updatePet, createPet}
+    return {getAllPets, getPetById, updatePet, createPet, getPetsByIds}
 }
