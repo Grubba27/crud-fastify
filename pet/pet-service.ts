@@ -31,5 +31,9 @@ export default function PetService(
         return db.insertOne(pet);
     }
 
-    return {getAllPets, getPetById, updatePet, createPet, getPetsByIds}
+    const deletePet = (id: string) => {
+        return db.deleteOne({_id: new ObjectId(id)});
+    }
+
+    return {getAllPets, getPetById, updatePet, createPet, getPetsByIds, deletePet}
 }
