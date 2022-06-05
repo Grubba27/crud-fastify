@@ -35,6 +35,7 @@ async function startApolloServer(typeDefs: any, resolvers: any) {
     ],
   });
 
+  
   await server.start();
   app.register(Db);
   app.register(PetController, {prefix: '/v1'});
