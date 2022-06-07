@@ -9,7 +9,6 @@ import {PocController} from "./poc";
 import {resolvers} from "./graphql/resolvers";
 import {typeDefs} from "./graphql/typedef";
 
-
 function fastifyAppClosePlugin(app: FastifyInstance): ApolloServerPlugin {
   return {
     async serverWillStart() {
@@ -28,20 +27,26 @@ async function startApolloServer(typeDefs: any, resolvers: any) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    csrfPrevention: true,
+    csrfPrevention: false,
     plugins: [
       fastifyAppClosePlugin(app),
       ApolloServerPluginDrainHttpServer({httpServer: app.server}),
     ],
   });
 
-  
   await server.start();
-  app.register(Db);
-  app.register(PetController, {prefix: '/v1'});
-  app.register(CustomerController, {prefix: '/v1'});
+  //disable cors
+  app.register(
+    server
+      .createHandler({
+        cors: {
+          origin: "*",
+        }
+      }));
+ // app.register(Db);
+  //app.register(PetController, {prefix: '/v1'});
+  //app.register(CustomerController, {prefix: '/v1'});
   app.register(PocController, {prefix: '/v1'});
-  app.register(server.createHandler());
   await app.listen(4000);
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
