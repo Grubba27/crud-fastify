@@ -5,7 +5,6 @@ import fastify, {FastifyInstance} from 'fastify';
 import {PocController} from "./poc";
 import {resolvers} from "./graphql/resolvers";
 import {typeDefs} from "./graphql/typedef";
-const port = process.env.PORT || 80;
 function fastifyAppClosePlugin(app: FastifyInstance): ApolloServerPlugin {
   return {
     async serverWillStart() {
@@ -44,7 +43,7 @@ async function startApolloServer(typeDefs: any, resolvers: any) {
   //app.register(PetController, {prefix: '/v1'});
   //app.register(CustomerController, {prefix: '/v1'});
   app.register(PocController, {prefix: '/v1'});
-  await app.listen(port);
+  await app.listen(process.env.PORT || 5000);
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
