@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json",
     "start": "node index.js",
-    "dev": "npm run build && npm run start",
+    "dev": "npm run build && npm run start"
   },
   "engines": {
     "node": "v16.15.0"
