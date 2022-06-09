@@ -16,7 +16,6 @@ function fastifyAppClosePlugin(app: FastifyInstance): ApolloServerPlugin {
     },
   };
 }
-const port = process.env.PORT || 8080;
 
 async function startApolloServer(typeDefs: any, resolvers: any) {
   const app = fastify();
@@ -43,6 +42,7 @@ async function startApolloServer(typeDefs: any, resolvers: any) {
   //app.register(PetController, {prefix: '/v1'});
   //app.register(CustomerController, {prefix: '/v1'});
   app.register(PocController, {prefix: '/v1'});
+  const port = process.env.PORT || 8080;
   await app.listen(port);
   console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`);
 }
