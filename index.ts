@@ -35,7 +35,7 @@ async function startApolloServer(typeDefs: any, resolvers: any) {
     server
       .createHandler({
         cors: {
-          origin: "*",
+          origin: ["*", 'localhost:4200'],
         }
       }));
  // app.register(Db);
